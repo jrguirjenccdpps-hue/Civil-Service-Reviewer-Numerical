@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Civil Service Reviewer "Numeral"</title>
+<style>
+body { font-family: Arial, sans-serif; background:#f4f4f4; margin:0; padding:20px; }
+h1 { text-align:center; font-size:calc(24px + 2vw); font-weight:bold; color:#1a237e; text-shadow:1px 1px 2px #aaa; }
+p.description { max-width:600px; margin:10px auto; text-align:center; font-size:16px; color:#555; }
+.menu, .quiz-box, .result-box { max-width:600px; margin:20px auto; background:white; padding:20px; border-radius:10px; box-shadow:0 4px 6px rgba(0,0,0,0.1); }
+button { border-radius:8px; border:0; cursor:pointer; transition:0.3s; font-size:18px; width:100%; padding:12px; margin:8px 0; }
+.choice-btn { background:#2e7d32; color:white; }
+.choice-btn:hover { background:#256628; }
+.control-btn { background:#1a237e; color:white; }
+.control-btn:hover { background:#283593; }
+.hidden { display:none; }
+.explanation { margin-top:10px; font-style:italic; color:#333; }
+.tip-box { margin-top:20px; padding:15px; background:#e8f5e9; border-left:5px solid #2e7d32; border-radius:8px; font-size:14px; color:#2e7d32; text-align:center; }
+.disclaimer { text-align:center; font-size:12px; color:#555; margin-top:30px; }
+#progressBar { width:100%; background:#ddd; height:15px; border-radius:8px; margin:10px 0; }
+#progress { width:0%; height:15px; background:#1a237e; border-radius:8px; }
+@media(max-width:480px){ h1 { font-size:28px; } }
+</style>
+</head>
+<body>
+
+<h1>Civil Service Reviewer "Numeral"</h1>
+<p class="description">Test your numerical reasoning skills with this Civil Service Reviewer. Choose a difficulty level and solve the problems to sharpen your number sense and logical thinking.</p>
+
+<div class="menu" id="mainMenu">
+  <button onclick="startQuiz('easy')">Easy</button>
+  <button onclick="startQuiz('normal')">Normal</button>
+  <button onclick="startQuiz('hard')">Hard</button>
+  <button onclick="sendFeedback()">Feedback</button>
+  <button onclick="shareApp()">Share App</button>
+
+  <div class="tip-box">
+    💡 <strong>Support this App!</strong><br>
+    If this reviewer helped you, consider supporting via:<br>
+    <strong>GCash:</strong> 09652367470 <button onclick="copyToClipboard('09652367470')">Copy</button><br>
+    <strong>PalawanPay:</strong> +639652367470 <button onclick="copyToClipboard('+639652367470')">Copy</button><br>
+    <em>“Invest in knowledge today, reap the rewards tomorrow!”</em>
+  </div>
+</div>
+
+<div id="progressBar"><div id="progress"></div></div>
+
+<div class="quiz-box hidden" id="quizBox">
+  <p id="questionNumber"></p>
+  <p id="questionText"></p>
+  <div id="choices"></div>
+  <p class="explanation" id="explanation"></p>
+  <button class="control-btn" onclick="nextQuestion()">Next</button>
+  <button class="control-btn" onclick="resetQuiz()">Reset</button>
+  <button class="control-btn" onclick="goHome()">Back</button>
+</div>
+
+<div class="menu hidden" id="resultBox">
+  <h2 id="resultText"></h2>
+  <button class="control-btn" onclick="goHome()">Back to Main Menu</button>
+  <button class="control-btn" onclick="shareApp()">Share App</button>
+</div>
+
+<p class="disclaimer">⚠️ Disclaimer: This app is for educational purposes only. Questions are for practice and self‑assessment.<br>© Created by: Joshua Guirjen</p>
+
+<script>
+// ========================
+// Questions: 90 total
+// ========================
+let questions = {
+easy:[
+{q:"What is 15 + 8?",c:["23","24","22","21"],a:"23",e:"15 plus 8 equals 23."},
+{q:"If 5 × 3 = ?",c:["15","10","8","12"],a:"15",e:"5 multiplied by 3 equals 15."},
+{q:"What is 20 − 7?",c:["13","12","14","15"],a:"13",e:"20 minus 7 equals 13."},
+{q:"Divide 18 ÷ 3",c:["6","5","7","4"],a:"6",e:"18 divided by 3 equals 6."},
+{q:"What comes next: 2,4,6,?",c:["8","10","7","9"],a:"8",e:"The pattern increases by 2."},
+{q:"10 × 0 = ?",c:["0","10","1","None"],a:"0",e:"Any number multiplied by 0 is 0."},
+{q:"What is half of 14?",c:["7","6","8","9"],a:"7",e:"14 divided by 2 equals 7."},
+{q:"Add: 9 + 6 = ?",c:["15","14","16","13"],a:"15",e:"9 plus 6 equals 15."},
+{q:"Subtract: 12 − 5 = ?",c:["7","6","8","5"],a:"7",e:"12 minus 5 equals 7."},
+{q:"Multiply: 4 × 2 = ?",c:["8","6","7","9"],a:"8",e:"4 multiplied by 2 equals 8."},
+{q:"Which is greater: 7 or 12?",c:["12","7","Equal","None"],a:"12",e:"12 is greater than 7."},
+{q:"What is 3 + 3 + 3?",c:["9","8","10","7"],a:"9",e:"3+3+3=9."},
+{q:"Divide 20 ÷ 4",c:["5","4","6","3"],a:"5",e:"20 divided by 4 equals 5."},
+{q:"Add: 7 + 2 = ?",c:["9","10","8","11"],a:"9",e:"7 plus 2 equals 9."},
+{q:"Subtract: 15 − 9 = ?",c:["6","7","5","4"],a:"6",e:"15 minus 9 equals 6."},
+{q:"What comes next: 5,10,15,?",c:["20","25","18","22"],a:"20",e:"The pattern increases by 5."},
+{q:"Half of 18 is?",c:["9","8","10","7"],a:"9",e:"18 divided by 2 equals 9."},
+{q:"Double of 7 is?",c:["14","12","15","13"],a:"14",e:"7×2=14."},
+{q:"Which is smaller: 3 or 8?",c:["3","8","Equal","None"],a:"3",e:"3 is smaller than 8."},
+{q:"Add: 6 + 7 = ?",c:["13","12","14","11"],a:"13",e:"6 plus 7 equals 13."},
+{q:"Subtract: 10 − 4 = ?",c:["6","7","5","8"],a:"6",e:"10 minus 4 equals 6."},
+{q:"Multiply: 3 × 3 = ?",c:["9","6","8","7"],a:"9",e:"3×3=9."},
+{q:"Divide: 12 ÷ 2 = ?",c:["6","5","7","4"],a:"6",e:"12 divided by 2 equals 6."},
+{q:"What comes next: 1,2,3,?",c:["4","5","6","7"],a:"4",e:"The pattern increases by 1."},
+{q:"Add: 4 + 5 = ?",c:["9","8","10","11"],a:"9",e:"4 plus 5 equals 9."},
+{q:"Subtract: 8 − 3 = ?",c:["5","4","6","7"],a:"5",e:"8 minus 3 equals 5."},
+{q:"Multiply: 2 × 6 = ?",c:["12","11","10","14"],a:"12",e:"2×6=12."},
+{q:"Divide: 16 ÷ 4 = ?",c:["4","5","3","6"],a:"4",e:"16 divided by 4 equals 4."},
+{q:"Which is greater: 9 or 5?",c:["9","5","Equal","None"],a:"9",e:"9 is greater than 5."}
+],
+
+// ========================
+// Normal 30 questions
+// ========================
+normal:[
+{q:"What is 45 + 28?",c:["73","74","72","75"],a:"73",e:"45+28=73."},
+{q:"Multiply: 12 × 3 = ?",c:["36","34","35","33"],a:"36",e:"12×3=36."},
+{q:"Divide 81 ÷ 9 = ?",c:["9","8","10","7"],a:"9",e:"81÷9=9."},
+{q:"What is 100 − 47?",c:["53","52","54","51"],a:"53",e:"100 minus 47 equals 53."},
+{q:"Next in series: 5,10,20,40,?",c:["80","75","70","60"],a:"80",e:"Series doubles each time."},
+{q:"Half of 64 is?",c:["32","30","33","31"],a:"32",e:"64 divided by 2 equals 32."},
+{q:"Multiply: 7 × 8 = ?",c:["56","54","55","57"],a:"56",e:"7×8=56."},
+{q:"Subtract: 120 − 75 = ?",c:["45","46","44","43"],a:"45",e:"120−75=45."},
+{q:"Divide: 144 ÷ 12 = ?",c:["12","11","13","10"],a:"12",e:"144÷12=12."},
+{q:"Next in series: 2,6,12,20,?",c:["30","28","32","26"],a:"30",e:"Pattern: add consecutive even numbers (4,6,8...)."},
+{q:"Add: 67 + 15 = ?",c:["82","81","83","80"],a:"82",e:"67+15=82."},
+{q:"Subtract: 90 − 45 = ?",c:["45","44","46","43"],a:"45",e:"90−45=45."},
+{q:"Multiply: 9 × 7 = ?",c:["63","62","64","65"],a:"63",e:"9×7=63."},
+{q:"Divide: 56 ÷ 8 = ?",c:["7","6","8","5"],a:"7",e:"56÷8=7."},
+{q:"Next in series: 1,4,9,16,?",c:["25","24","26","23"],a:"25",e:"Squares series: 1²,2²,3²,4²..."},
+{q:"What is 15% of 200?",c:["30","25","35","40"],a:"30",e:"15% of 200=0.15×200=30."},
+{q:"Add: 125 + 76 = ?",c:["201","200","202","199"],a:"201",e:"125+76=201."},
+{q:"Subtract: 200 − 86 = ?",c:["114","115","113","112"],a:"114",e:"200−86=114."},
+{q:"Multiply: 15 × 6 = ?",c:["90","85","95","100"],a:"90",e:"15×6=90."},
+{q:"Divide: 90 ÷ 9 = ?",c:["10","9","11","8"],a:"10",e:"90÷9=10."},
+{q:"Next in series: 3,6,12,24,?",c:["48","42","50","45"],a:"48",e:"Series doubles each time."},
+{q:"What is 8²?",c:["64","60","65","66"],a:"64",e:"8 squared is 64."},
+{q:"Subtract: 150 − 78 = ?",c:["72","73","71","74"],a:"72",e:"150−78=72."},
+{q:"Multiply: 11 × 11 = ?",c:["121","120","122","119"],a:"121",e:"11×11=121."},
+{q:"Divide: 81 ÷ 9 = ?",c:["9","8","10","7"],a:"9",e:"81÷9=9."},
+{q:"Next in series: 5,15,45,?",c:["135","140","130","150"],a:"135",e:"Series multiplies by 3."},
+{q:"Add: 250 + 375 = ?",c:["625","600","620","630"],a:"625",e:"250+375=625."},
+{q:"Subtract: 500 − 275 = ?",c:["225","225","230","220"],a:"225",e:"500−275=225."},
+{q:"Multiply: 14 × 7 = ?",c:["98","96","100","97"],a:"98",e:"14×7=98."},
+{q:"Divide: 144 ÷ 12 = ?",c:["12","11","13","10"],a:"12",e:"144÷12=12."}
+],
+
+// ========================
+// Hard 30 questions
+// ========================
+hard:[
+{q:"If 2x + 5 = 17, x = ?",c:["6","5","7","8"],a:"6",e:"2x+5=17 → 2x=12 → x=6."},
+{q:"Next in series: 3,9,27,?",c:["81","72","75","80"],a:"81",e:"Series multiplies by 3."},
+{q:"If 5y − 10 = 25, y = ?",c:["7","6","5","8"],a:"7",e:"5y−10=25 → 5y=35 → y=7."},
+{q:"Solve: 12 × 12 ÷ 4 = ?",c:["36","34","35","33"],a:"36",e:"12×12=144; 144÷4=36."},
+{q:"Next in series: 2,5,10,17,?",c:["26","25","27","28"],a:"26",e:"Pattern: add consecutive odd numbers (3,5,7...)."},
+{q:"If 3a + 4 = 19, a = ?",c:["5","4","6","7"],a:"5",e:"3a+4=19 → 3a=15 → a=5."},
+{q:"Multiply: 13 × 8 = ?",c:["104","102","105","100"],a:"104",e:"13×8=104."},
+{q:"Divide: 225 ÷ 15 = ?",c:["15","14","16","12"],a:"15",e:"225÷15=15."},
+{q:"Next in series: 1,1,2,6,24,?",c:["120","120","100","125"],a:"120",e:"Factorial series: 1!,1!,2!,3!,4!,5!=120."},
+{q:"What is 20% of 250?",c:["50","40","45","55"],a:"50",e:"0.2×250=50."},
+{q:"If x/3 = 7, x = ?",c:["21","20","22","19"],a:"21",e:"x/3=7 → x=21."},
+{q:"Add: 123 + 456 = ?",c:["579","580","578","577"],a:"579",e:"123+456=579."},
+{q:"Subtract: 1000 − 675 = ?",c:["325","326","324","330"],a:"325",e:"1000−675=325."},
+{q:"Multiply: 17 × 6 = ?",c:["102","100","103","105"],a:"102",e:"17×6=102."},
+{q:"Divide: 144 ÷ 16 = ?",c:["9","8","10","11"],a:"9",e:"144÷16=9."},
+{q:"Next in series: 5,8,12,17,?",c:["23","22","24","21"],a:"23",e:"Pattern: add consecutive integers increasing by 1."},
+{q:"If 7x − 3 = 25, x = ?",c:["4","5","6","3"],a:"4",e:"7x−3=25 → 7x=28 → x=4."},
+{q:"Add: 256 + 378 = ?",c:["634","630","635","632"],a:"634",e:"256+378=634."},
+{q:"Subtract: 980 − 467 = ?",c:["513","512","514","510"],a:"513",e:"980−467=513."},
+{q:"Multiply: 19 × 7 = ?",c:["133","132","134","135"],a:"133",e:"19×7=133."},
+{q:"Divide: 360 ÷ 12 = ?",c:["30","28","32","31"],a:"30",e:"360÷12=30."},
+{q:"Next in series: 2,6,12,20,30,?",c:["42","40","44","41"],a:"42",e:"Pattern: add consecutive even numbers: +4,+6,+8,+10,..."},
+{q:"If 9x + 5 = 50, x = ?",c:["5","6","4","7"],a:"5",e:"9x+5=50 → 9x=45 → x=5."},
+{q:"What is 15²?",c:["225","215","220","230"],a:"225",e:"15 squared is 225."},
+{q:"Divide: 360 ÷ 15 = ?",c:["24","25","23","22"],a:"24",e:"360÷15=24."},
+{q:"Multiply: 18 × 6 = ?",c:["108","110","107","109"],a:"108",e:"18×6=108."},
+{q:"Next in series: 1,4,9,16,25,?",c:["36","35","34","37"],a:"36",e:"Squares series: 1²,2²,3²...6²=36."},
+{q:"Add: 789 + 456 = ?",c:["1245","1246","1244","1240"],a:"1245",e:"789+456=1245."},
+{q:"Subtract: 1000 − 387 = ?",c:["613","612","614","615"],a:"613",e:"1000−387=613."},
+{q:"If x/5 + 7 = 15, x = ?",c:["40","35","45","50"],a:"40",e:"x/5+7=15 → x/5=8 → x=40."}
+]
+};
+
+// ========================
+// Quiz Logic
+// ========================
+let currentSet=[],index=0,score=0,timer,TIME_PER_QUESTION=0;
+
+function startQuiz(level){
+  document.getElementById("mainMenu").classList.add("hidden");
+  document.getElementById("quizBox").classList.remove("hidden");
+  index=0; score=0;
+  currentSet=questions[level];
+  showQuestion();
+}
+
+function showQuestion(){
+  let q=currentSet[index];
+  document.getElementById("questionNumber").innerText=`Question ${index+1} of ${currentSet.length}`;
+  document.getElementById("questionText").innerText=q.q;
+  document.getElementById("explanation").innerText='';
+  let html='';
+  shuffleArray([...q.c]).forEach(c=>{
+    html+=`<button class='choice-btn' onclick='checkAnswer("${c}",this)'>${c}</button>`;
+  });
+  document.getElementById("choices").innerHTML=html;
+  updateProgress();
+}
+
+function checkAnswer(choiceText,btn){
+  let q=currentSet[index];
+  if(choiceText===q.a){score++; btn.classList.add('correct'); document.getElementById("explanation").innerText=`Correct! ${q.e}`;}
+  else {btn.classList.add('incorrect'); document.getElementById("explanation").innerText=`Incorrect. ${q.e}`;}
+  Array.from(document.getElementById("choices").children).forEach(b=>b.disabled=true);
+}
+
+function nextQuestion(){
+  index++; if(index>=currentSet.length){finishQuiz(); return;} showQuestion();
+}
+function finishQuiz(){
+  document.getElementById("quizBox").classList.add("hidden");
+  document.getElementById("resultBox").classList.remove("hidden");
+  let percent=Math.round((score/currentSet.length)*100);
+  let msg=percent<80?"Let's try again!":(percent<=90?"Very Good!":"Congratulations!");
+  document.getElementById("resultText").innerText=`Score: ${percent}% - ${msg}`;
+}
+function goHome(){
+  document.getElementById("resultBox").classList.add("hidden");
+  document.getElementById("mainMenu").classList.remove("hidden");
+}
+function resetQuiz(){index=0; score=0; showQuestion();}
+function copyToClipboard(text){navigator.clipboard.writeText(text).then(()=>alert('Copied: '+text));}
+function sendFeedback(){window.location.href='mailto:joshuaguirjen01@gmail.com?subject=Feedback for Civil Service Numeral Reviewer';}
+function shareApp(){navigator.clipboard.writeText(window.location.href).then(()=>alert('App link copied to clipboard!'));}
+function updateProgress(){document.getElementById('progress').style.width=((index)/currentSet.length)*100+'%';}
+function shuffleArray(array){for(let i=array.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [array[i],array[j]]=[array[j],array[i]];} return array;}
+</script>
+
+</body>
+</html>
