@@ -4,44 +4,112 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Civil Service Reviewer "Numeral"</title>
+
 <style>
-body { font-family: Arial, sans-serif; background:#f4f4f4; margin:0; padding:20px; }
-h1 { text-align:center; font-size:calc(24px + 2vw); font-weight:bold; color:#1a237e; text-shadow:1px 1px 2px #aaa; }
-p.description { max-width:600px; margin:10px auto; text-align:center; font-size:16px; color:#555; }
-.menu, .quiz-box, .result-box { max-width:600px; margin:20px auto; background:white; padding:20px; border-radius:10px; box-shadow:0 4px 6px rgba(0,0,0,0.1); }
-button { border-radius:8px; border:0; cursor:pointer; transition:0.3s; font-size:18px; width:100%; padding:12px; margin:8px 0; }
-.choice-btn { background:#2e7d32; color:white; }
+body {
+  font-family: Arial, sans-serif;
+  background:#f4f4f4;
+  margin:0;
+  padding:20px;
+}
+
+h1 {
+  text-align:center;
+  font-size:calc(26px + 2vw);
+  font-weight:bold;
+  color:#1a237e;
+}
+
+p.description {
+  max-width:600px;
+  margin:10px auto;
+  text-align:center;
+  font-size:16px;
+  color:#555;
+}
+
+.menu, .quiz-box, .result-box {
+  max-width:600px;
+  margin:20px auto;
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 4px 6px rgba(0,0,0,0.1);
+}
+
+button {
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  font-size:17px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.choice-btn {
+  background:#2e7d32;
+  color:white;
+}
 .choice-btn:hover { background:#256628; }
-.control-btn { background:#1a237e; color:white; }
+
+.control-btn {
+  background:#1a237e;
+  color:white;
+}
 .control-btn:hover { background:#283593; }
+
+.back-btn {
+  background:#616161;
+  color:white;
+}
+.back-btn:hover { background:#424242; }
+
 .hidden { display:none; }
-.explanation { margin-top:10px; font-style:italic; color:#333; }
-.tip-box { margin-top:20px; padding:15px; background:#e8f5e9; border-left:5px solid #2e7d32; border-radius:8px; font-size:14px; color:#2e7d32; text-align:center; }
-.disclaimer { text-align:center; font-size:12px; color:#555; margin-top:30px; }
-#progressBar { width:100%; background:#ddd; height:15px; border-radius:8px; margin:10px 0; }
-#progress { width:0%; height:15px; background:#1a237e; border-radius:8px; }
-@media(max-width:480px){ h1 { font-size:28px; } }
+
+.explanation {
+  margin-top:10px;
+  font-style:italic;
+  color:#333;
+}
+
+#progressBar {
+  max-width:600px;
+  margin:10px auto;
+  background:#ddd;
+  height:15px;
+  border-radius:8px;
+}
+
+#progress {
+  height:15px;
+  width:0%;
+  background:#1a237e;
+  border-radius:8px;
+}
+
+.disclaimer {
+  text-align:center;
+  font-size:12px;
+  color:#555;
+  margin-top:30px;
+}
 </style>
 </head>
+
 <body>
 
-<h1>Civil Service Reviewer "Numeral"</h1>
-<p class="description">Test your numerical reasoning skills with this Civil Service Reviewer. Choose a difficulty level and solve the problems to sharpen your number sense and logical thinking.</p>
+<h1>Civil Service Reviewer – Numeral Ability</h1>
+<p class="description">
+This section tests your arithmetic skills, number patterns, and problem-solving abilities
+commonly found in the Philippine Civil Service Examination.
+</p>
 
 <div class="menu" id="mainMenu">
   <button onclick="startQuiz('easy')">Easy</button>
   <button onclick="startQuiz('normal')">Normal</button>
   <button onclick="startQuiz('hard')">Hard</button>
-  <button onclick="sendFeedback()">Feedback</button>
-  <button onclick="shareApp()">Share App</button>
-
-  <div class="tip-box">
-    💡 <strong>Support this App!</strong><br>
-    If this reviewer helped you, consider supporting via:<br>
-    <strong>GCash:</strong> 09652367470 <button onclick="copyToClipboard('09652367470')">Copy</button><br>
-    <strong>PalawanPay:</strong> +639652367470 <button onclick="copyToClipboard('+639652367470')">Copy</button><br>
-    <em>“Invest in knowledge today, reap the rewards tomorrow!”</em>
-  </div>
+  <button class="back-btn" onclick="goToMain()">← Back to Main Reviewer</button>
 </div>
 
 <div id="progressBar"><div id="progress"></div></div>
@@ -51,18 +119,22 @@ button { border-radius:8px; border:0; cursor:pointer; transition:0.3s; font-size
   <p id="questionText"></p>
   <div id="choices"></div>
   <p class="explanation" id="explanation"></p>
+
   <button class="control-btn" onclick="nextQuestion()">Next</button>
   <button class="control-btn" onclick="resetQuiz()">Reset</button>
-  <button class="control-btn" onclick="goHome()">Back</button>
+  <button class="back-btn" onclick="goHome()">Back</button>
 </div>
 
-<div class="menu hidden" id="resultBox">
+<div class="result-box hidden" id="resultBox">
   <h2 id="resultText"></h2>
-  <button class="control-btn" onclick="goHome()">Back to Main Menu</button>
-  <button class="control-btn" onclick="shareApp()">Share App</button>
+  <button class="control-btn" onclick="goHome()">Back to Difficulty Menu</button>
+  <button class="back-btn" onclick="goToMain()">Back to Main Reviewer</button>
 </div>
 
-<p class="disclaimer">⚠️ Disclaimer: This app is for educational purposes only. Questions are for practice and self‑assessment.<br>© Created by: Joshua Guirjen</p>
+<p class="disclaimer">
+⚠️ Disclaimer: This reviewer is for educational purposes only.<br>
+© Created by: Joshua Guirjen
+</p>
 
 <script>
 // ========================
@@ -174,59 +246,74 @@ hard:[
 ]
 };
 
-// ========================
-// Quiz Logic
-// ========================
-let currentSet=[],index=0,score=0,timer,TIME_PER_QUESTION=0;
+// ===============================
+// QUIZ LOGIC
+// ===============================
+let currentSet = [];
+let index = 0;
+let score = 0;
 
 function startQuiz(level){
+  currentSet = questions[level];
+  index = 0;
+  score = 0;
   document.getElementById("mainMenu").classList.add("hidden");
   document.getElementById("quizBox").classList.remove("hidden");
-  index=0; score=0;
-  currentSet=questions[level];
   showQuestion();
 }
 
 function showQuestion(){
-  let q=currentSet[index];
-  document.getElementById("questionNumber").innerText=`Question ${index+1} of ${currentSet.length}`;
-  document.getElementById("questionText").innerText=q.q;
-  document.getElementById("explanation").innerText='';
-  let html='';
-  shuffleArray([...q.c]).forEach(c=>{
-    html+=`<button class='choice-btn' onclick='checkAnswer("${c}",this)'>${c}</button>`;
-  });
-  document.getElementById("choices").innerHTML=html;
+  const q = currentSet[index];
+  document.getElementById("questionNumber").innerText = `Question ${index+1} of ${currentSet.length}`;
+  document.getElementById("questionText").innerText = q.q;
+  document.getElementById("explanation").innerText = "";
+  const choices = shuffle([...q.c]).map(c =>
+    `<button class="choice-btn" onclick="checkAnswer('${c}', this)">${c}</button>`
+  ).join("");
+  document.getElementById("choices").innerHTML = choices;
   updateProgress();
 }
 
-function checkAnswer(choiceText,btn){
-  let q=currentSet[index];
-  if(choiceText===q.a){score++; btn.classList.add('correct'); document.getElementById("explanation").innerText=`Correct! ${q.e}`;}
-  else {btn.classList.add('incorrect'); document.getElementById("explanation").innerText=`Incorrect. ${q.e}`;}
-  Array.from(document.getElementById("choices").children).forEach(b=>b.disabled=true);
+function checkAnswer(ans, btn){
+  const q = currentSet[index];
+  document.getElementById("explanation").innerText =
+    ans === q.a ? `Correct! ${q.e}` : `Incorrect. ${q.e}`;
+  if(ans === q.a) score++;
+  [...document.querySelectorAll(".choice-btn")].forEach(b => b.disabled = true);
 }
 
 function nextQuestion(){
-  index++; if(index>=currentSet.length){finishQuiz(); return;} showQuestion();
+  index++;
+  if(index >= currentSet.length) return finishQuiz();
+  showQuestion();
 }
+
 function finishQuiz(){
   document.getElementById("quizBox").classList.add("hidden");
   document.getElementById("resultBox").classList.remove("hidden");
-  let percent=Math.round((score/currentSet.length)*100);
-  let msg=percent<80?"Let's try again!":(percent<=90?"Very Good!":"Congratulations!");
-  document.getElementById("resultText").innerText=`Score: ${percent}% - ${msg}`;
+  const percent = Math.round((score / currentSet.length) * 100);
+  document.getElementById("resultText").innerText = `Your Score: ${percent}%`;
 }
+
+function resetQuiz(){ index = 0; score = 0; showQuestion(); }
 function goHome(){
+  document.getElementById("quizBox").classList.add("hidden");
   document.getElementById("resultBox").classList.add("hidden");
   document.getElementById("mainMenu").classList.remove("hidden");
 }
-function resetQuiz(){index=0; score=0; showQuestion();}
-function copyToClipboard(text){navigator.clipboard.writeText(text).then(()=>alert('Copied: '+text));}
-function sendFeedback(){window.location.href='mailto:joshuaguirjen01@gmail.com?subject=Feedback for Civil Service Numeral Reviewer';}
-function shareApp(){navigator.clipboard.writeText(window.location.href).then(()=>alert('App link copied to clipboard!'));}
-function updateProgress(){document.getElementById('progress').style.width=((index)/currentSet.length)*100+'%';}
-function shuffleArray(array){for(let i=array.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [array[i],array[j]]=[array[j],array[i]];} return array;}
+function goToMain(){
+  window.location.href="https://jrguirjenccdpps-hue.github.io/Civil-Service-Exam-Reviewer/";
+}
+function updateProgress(){
+  document.getElementById("progress").style.width = ((index)/currentSet.length)*100 + "%";
+}
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
 </script>
 
 </body>
